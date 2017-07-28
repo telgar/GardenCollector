@@ -13,6 +13,10 @@ const db = low('../data.json', {
 db.defaults({ temperature: [], soil: [], humidity: [] })
   .write()
 
+const board = new five.Board({
+  repl: false
+});
+
 // Read from Arduino
 board.on("ready", function() {
 
