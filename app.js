@@ -7,11 +7,15 @@ const constants = require('./constants');
 const formatters = require('./formatters');
 
 // Start database using file-async storage, and initialize
-const db = low('../data.json', {
+const tempDb = low('../temperature.json', {
   storage: fileAsync
 })
-db.defaults({ temperature: [], soil: [], humidity: [] })
-  .write()
+tempDb.defaults({ temperature: [] }).write()
+
+const soildDb = low('../soil.json', {
+  storage: fileAsync
+})
+soildDb.defaults({ soil: [] }).write()
 
 const board = new five.Board({
   repl: false
@@ -29,13 +33,13 @@ board.on("ready", function() {
 
   thermometer.on("data", function() {
        
-    db.get('temperature')
+    tempDb.get('temperature')
       .push({ timestamp: new Date(), celsius: this.celsius })
       .write()
 
     let oldestRecord = new Date().getTime() - constants.LOG_LIMIT
     
-    db.get('temperature')
+    tempDb.get('temperature')
       .remove((o) => new Date(o.timestamp).getTime() < oldestRecord)
       .write()    
   });
@@ -48,13 +52,13 @@ board.on("ready", function() {
 
   soilHumidity.on("data", function() {
 
-    db.get('soil')
+    soildDb.get('soil')
       .push({ timestamp: new Date(), moisture: formatters.humidityPerc(this.value) })
       .write()
 
     let oldestRecord = new Date().getTime() - constants.LOG_LIMIT
     
-    db.get('soil')
+    soildDb.get('soil')
       .remove((o) => new Date(o.timestamp).getTime() < oldestRecord)
       .write()
   });
