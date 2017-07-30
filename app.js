@@ -33,9 +33,11 @@ board.on("ready", function() {
 
   thermometer.on("data", function() {
        
-    tempDb.get('temperature')
-      .push({ timestamp: new Date(), celsius: this.celsius })
-      .write()
+    if (this.celsius < constants.BAD_READING_THRESHOLD) {    
+      tempDb.get('temperature')
+        .push({ timestamp: new Date(), celsius: this.celsius })
+        .write()
+    }
 
     let oldestRecord = new Date().getTime() - constants.LOG_LIMIT
     

@@ -13,6 +13,9 @@ const DRY = 520;
 const WET = 280;
 const RANGE = DRY - WET;
 
+// Temperature Sensor
+const BAD_READING_THRESHOLD = 50;
+
 module.exports = {
     // Logging
     SAMPLE_RATE: SAMPLE_RATE,
@@ -21,4 +24,6 @@ module.exports = {
     DRY: DRY,
     WET: WET,
     RANGE: RANGE,
+    // Temperature Sensor
+    BAD_READING_THRESHOLD
 };
