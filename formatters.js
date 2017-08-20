@@ -1,17 +1,19 @@
-const constants = require('./constants');
-
 // calculate the % soil humidity from raw readings
-var humidityPerc = function(reading) {
+var humidityPerc = function(reading, dryLimit, wetLimit, rangeLimit) {
   
-  if (reading > constants.DRY) { 
+  if (reading > dryLimit) { 
     console.log('Dryer than dry! Reading = ' + reading)
   }
 
-  if (reading < constants.WET) {
+  if (reading < wetLimit) {
     console.log('Wetter than wet! Reading = ' + reading)
   }
 
-  return (constants.DRY - reading) / constants.RANGE * 100;
+  var percMoisture = (dryLimit - reading) / rangeLimit * 100;
+
+  //console.log("Raw reading: " + reading + " dry: " + dryLimit + " wet: " + wetLimit + " range: " + rangeLimit + " perc: " + percMoisture);
+  
+  return percMoisture;
 }
 
 module.exports = {
