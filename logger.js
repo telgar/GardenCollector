@@ -13,11 +13,11 @@ const log = function() {
     for (let i = 0; i < arguments.length; i++) {
         
     }
-
-    console.log(arguments[i]);
+    var args = [].slice.call(arguments);
+    console.log(args);
 
     logDb.get('logs')
-        .push({ timestamp: new Date(), log: arguments })
+        .push({ timestamp: new Date(), log: args })
         .write()
 }
 
