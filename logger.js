@@ -14,10 +14,10 @@ const log = function() {
         
     }
     var args = [].slice.call(arguments);
-    console.log(args.splice(0, 1));
+    console.log(args);
 
     logDb.get('logs')
-        .push({ timestamp: new Date(), log: args.splice(0, 1) })
+        .push({ timestamp: new Date(), log: args })
         .write()
 }
 
