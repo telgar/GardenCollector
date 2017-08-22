@@ -36,7 +36,7 @@ function wateringCheck(soilDbPath, relay) {
 
             relay.close();
 
-            logger.log ('Relay(' + relay.pin + + ') closed.')
+            logger.log ('Relay(' + relay.pin + ') closed.')
 
             logger.log('Waiting for '+ (constants.WATERING_TIME / 1000) + ' seconds...')
 
@@ -46,9 +46,7 @@ function wateringCheck(soilDbPath, relay) {
 
                 logger.log('Relay(' + relay.pin + ') opened.')          
 
-            }, constants.WATERING_TIME)
-
-                      
+            }, constants.WATERING_TIME)                      
         }
     } catch (e) {
         logger.log(e)
