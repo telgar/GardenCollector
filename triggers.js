@@ -84,7 +84,6 @@ module.exports = {
 
         console.log('Opening relay(' + constants.RELAY1_PIN + ').')
 
-        //openRelay(constants.RELAY1_PIN);
         this.relays[constants.RELAY1_PIN].open();
     }
 }

@@ -17,7 +17,7 @@ const soild1Db = low(constants.SOIL1_DB_PATH, {
 })
 soild1Db.defaults({ soil: [] }).write()
 
-const soild2Db = low(constants.SOIL2_DB_PATH2, {
+const soild2Db = low(constants.SOIL2_DB_PATH, {
   storage: fileAsync
 })
 soild2Db.defaults({ soil: [] }).write()
@@ -61,6 +61,8 @@ board.on("ready", function() {
 
   soil1Humidity.on("data", function() {
 
+    console.log('soil1', this.value)
+
     soild1Db.get('soil')
       .push({ 
         timestamp: new Date(), 
@@ -82,6 +84,8 @@ board.on("ready", function() {
 
   soil2Humidity.on("data", function() {
 
+    console.log('soil2', this.value)
+    
     soild2Db.get('soil')
       .push({ 
         timestamp: new Date(), 
