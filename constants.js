@@ -25,6 +25,7 @@ const WATERING_CHECK_INTERVAL = 1000 * 60 * 5
 const BAD_READING_THRESHOLD = 50;
 
 // DB Paths
+const LOG_DB_PATH = '../logs.json';
 const TEMPERATURE_DB_PATH = '../temperature.json';
 const SOIL1_DB_PATH = '../soil1.json';
 const SOIL2_DB_PATH = '../soil2.json';
@@ -53,6 +54,7 @@ module.exports = {
     // Temperature Sensor
     BAD_READING_THRESHOLD,
     // DB Paths
+    LOG_DB_PATH: LOG_DB_PATH,
     TEMPERATURE_DB_PATH: TEMPERATURE_DB_PATH,
     SOIL1_DB_PATH: SOIL1_DB_PATH,
     SOIL2_DB_PATH: SOIL2_DB_PATH,

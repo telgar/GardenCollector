@@ -4,7 +4,8 @@ const five = require("johnny-five");
 
 const constants = require('./constants');
 const formatters = require('./formatters');
-const trigger = require('./triggers')
+const trigger = require('./triggers');
+const logger = require('./logger');
 
 // Start database using file-async storage, and initialize
 const tempDb = low(constants.TEMPERATURE_DB_PATH, {
@@ -29,7 +30,7 @@ const board = new five.Board({
 // Read from Arduino
 board.on("ready", function() {
 
-  console.log('Arduino is ready. Sampling every ' + (constants.SAMPLE_RATE / 1000) + ' seconds.')
+  logger.log('Arduino is ready. Sampling every ' + (constants.SAMPLE_RATE / 1000) + ' seconds.')
 
   // Temperature
   var thermometer = new five.Thermometer({

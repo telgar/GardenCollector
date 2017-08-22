@@ -4,6 +4,7 @@ const _ = require('lodash')
 const five = require("johnny-five");
 
 const constants = require('./constants');
+const logger = require('./logger');
 
 function roundToClosest(number, closest) {
 
@@ -31,26 +32,26 @@ function wateringCheck(soilDbPath, relay) {
 
         if (allBelowThreshold) {
 
-            console.log('All logs below the threshold for "' + soilDbPath + '" , closing relay(' + relay.pin + ').')
+            logger.log('All logs below the threshold for "' + soilDbPath + '" , closing relay(' + relay.pin + ').')
 
             relay.close();
 
-            console.log ('Relay(' + relay.pin + + ') closed.')
+            logger.log ('Relay(' + relay.pin + + ') closed.')
 
-            console.log('Waiting for '+ (constants.WATERING_TIME / 1000) + ' seconds...')
+            logger.log('Waiting for '+ (constants.WATERING_TIME / 1000) + ' seconds...')
 
             var wateringTImeout = setTimeout(function() {
 
                 relay.open();
 
-                console.log('Relay(' + relay.pin + ') opened.')          
+                logger.log('Relay(' + relay.pin + ') opened.')          
 
             }, constants.WATERING_TIME)
 
                       
         }
     } catch (e) {
-        console.log(e)
+        logger.log(e)
     }
 }
 
@@ -58,7 +59,7 @@ module.exports = {
     relays: {},
     init: function() {
 
-        console.log('Setting intial state: Opening relay(' + constants.RELAY1_PIN + ').')
+        logger.log('Setting intial state: Opening relay(' + constants.RELAY1_PIN + ').')
         
         this.relays[constants.RELAY1_PIN] = new five.Relay({
             pin: constants.RELAY1_PIN
@@ -70,7 +71,7 @@ module.exports = {
  
         var self = this;
         
-        console.log('Starting "' + constants.SOIL1_DB_PATH + '" trigger on a ' + (constants.WATERING_CHECK_INTERVAL / 1000) + ' second interval...');
+        logger.log('Starting "' + constants.SOIL1_DB_PATH + '" trigger on a ' + (constants.WATERING_CHECK_INTERVAL / 1000) + ' second interval...');
 
         this.soil1Trigger = setInterval(
             function() { wateringCheck(constants.SOIL1_DB_PATH, self.relays[constants.RELAY1_PIN]) }, 
@@ -78,13 +79,12 @@ module.exports = {
     },
     stop: function() {
 
-        console.log('Stopping "' + constants.SOIL1_DB_PATH + '" trigger.');
+        logger.log('Stopping "' + constants.SOIL1_DB_PATH + '" trigger.');
 
         clearInterval(this.soil1Trigger);
 
-        console.log('Opening relay(' + constants.RELAY1_PIN + ').')
+        logger.log('Opening relay(' + constants.RELAY1_PIN + ').')
 
-        //openRelay(constants.RELAY1_PIN);
         this.relays[constants.RELAY1_PIN].open();
     }
 }
