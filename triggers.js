@@ -32,7 +32,7 @@ function wateringCheck(soilDbPath, relay) {
 
         if (allBelowThreshold) {
 
-            logger.log('All logs below the threshold for "' + soilDbPath + '" , closing relay(' + relay.pin + ').')
+            logger.log('All logs below the threshold of ' + constants.MOISTURE_THRESHOLD + '% for "' + soilDbPath + '" , closing relay(' + relay.pin + ').')
 
             relay.close();
 
@@ -47,6 +47,8 @@ function wateringCheck(soilDbPath, relay) {
                 logger.log('Relay(' + relay.pin + ') opened.')          
 
             }, constants.WATERING_TIME)                      
+        } else {
+            logger.log('Not all logs below threshold of ' + constants.MOISTURE_THRESHOLD + '%, waiting ' + (constants.WATERING_CHECK_INTERVAL / 1000) + ' seconds...')
         }
     } catch (e) {
         logger.log(e)
