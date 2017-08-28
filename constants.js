@@ -6,7 +6,7 @@ const WEEK = DAY * 7
 
 // Logging
 const SAMPLE_RATE = 1000 * 60;
-const LOG_LIMIT = DAY * 30;
+const LOG_LIMIT = DAY * 60;
 
 // Soil Sensor
 const DRY1 = 520;
@@ -17,7 +17,7 @@ const DRY2 = 510;
 const WET2 = 270;
 const RANGE2 = DRY2 - WET2;
 
-const MOISTURE_THRESHOLD = 10
+const MOISTURE_THRESHOLD = 20
 const WATERING_TIME = 1000 * 60 * 2
 const WATERING_CHECK_INTERVAL = 1000 * 60 * 10
 
