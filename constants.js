@@ -18,7 +18,7 @@ const WET2 = 270;
 const RANGE2 = DRY2 - WET2;
 
 const MOISTURE_THRESHOLD = 60
-const WATERING_TIME = 1000 * 60 * 1
+const WATERING_TIME = 1000 * 60 * 2
 const WATERING_CHECK_INTERVAL = 1000 * 60 * 5
 
 // Temperature Sensor
