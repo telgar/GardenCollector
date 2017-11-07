@@ -6,7 +6,7 @@ const WEEK = DAY * 7
 
 // Logging
 const SAMPLE_RATE = 1000 * 60;
-const LOG_LIMIT = DAY * 60;
+const LOG_LIMIT = DAY * 1;
 
 // Soil Sensor
 const DRY1 = 520;
