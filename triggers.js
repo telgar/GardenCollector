@@ -36,7 +36,7 @@ function wateringCheck(soilDbPath, relay) {
 
             relay.close();
 
-            logger.log ('Relay(' + relay.pin + ') closed.')
+            //logger.log ('Relay(' + relay.pin + ') closed.')
 
             logger.log('Waiting for '+ (constants.WATERING_TIME / 1000) + ' seconds...')
 
@@ -44,11 +44,11 @@ function wateringCheck(soilDbPath, relay) {
 
                 relay.open();
 
-                logger.log('Relay(' + relay.pin + ') opened.')          
+                //logger.log('Relay(' + relay.pin + ') opened.')          
 
             }, constants.WATERING_TIME)                      
         } else {
-            logger.log('Not all logs below threshold of ' + constants.MOISTURE_THRESHOLD + '%, waiting ' + (constants.WATERING_CHECK_INTERVAL / 1000) + ' seconds...')
+            //logger.log('Not all logs below threshold of ' + constants.MOISTURE_THRESHOLD + '%, waiting ' + (constants.WATERING_CHECK_INTERVAL / 1000) + ' seconds...')
         }
     } catch (e) {
         logger.log(e)
@@ -59,7 +59,7 @@ module.exports = {
     relays: {},
     init: function() {
 
-        logger.log('Setting intial state: Opening relay(' + constants.RELAY1_PIN + ').')
+        //logger.log('Setting intial state: Opening relay(' + constants.RELAY1_PIN + ').')
         
         this.relays[constants.RELAY1_PIN] = new five.Relay({
             pin: constants.RELAY1_PIN
@@ -83,7 +83,7 @@ module.exports = {
 
         clearInterval(this.soil1Trigger);
 
-        logger.log('Opening relay(' + constants.RELAY1_PIN + ').')
+        //logger.log('Opening relay(' + constants.RELAY1_PIN + ').')
 
         this.relays[constants.RELAY1_PIN].open();
     }
