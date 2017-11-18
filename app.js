@@ -18,12 +18,10 @@ const soild1Db = low(constants.SOIL1_DB_PATH, {
 })
 soild1Db.defaults({ soil: [] }).write()
 
-/*
 const soild2Db = low(constants.SOIL2_DB_PATH, {
   storage: fileAsync
 })
 soild2Db.defaults({ soil: [] }).write()
-*/
 
 const board = new five.Board({
   repl: false
@@ -77,8 +75,7 @@ board.on("ready", function() {
       .write()
   });
 
-  // Soil moisture 2
-  /*
+  // Soil moisture 2  
   var soil2Humidity = new five.Sensor({
     pin: constants.SOIL2_SENSOR_PIN,
     freq: constants.SAMPLE_RATE
@@ -98,7 +95,7 @@ board.on("ready", function() {
       .remove((o) => new Date(o.timestamp).getTime() < oldestRecord)
       .write()
   });
-  */
+  
   trigger.init();
   trigger.start();
 });
