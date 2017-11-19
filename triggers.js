@@ -11,44 +11,49 @@ function roundToClosest(number, closest) {
     return Math.round(number / closest * closest);
 }
 
-function wateringCheck(soilDbPath, relay) {
+function wateringCheck(relay) {
 
     // read last 10 samples, and if all are below the threshold then close relay
     try {
-        let soilDb = low(soilDbPath, {
+        let soilDb1 = low(constants.SOIL1_DB_PATH, {
             storage: require('lowdb/lib/storages/file-async')
         })        
-        const logs = soilDb.get('soil')
+        const logs1 = soilDb1.get('soil')
             .sortBy(['timestamp'])
             .reverse()
             .take(10)
             .map((o) => { return roundToClosest(o.moisture, 100) })
             .value()
 
-        let allBelowThreshold = _.every(logs, function(log) {
+        let allBelowThreshold1 = _.every(logs1, function(log) { return log < constants.MOISTURE_THRESHOLD })
 
-            return log < constants.MOISTURE_THRESHOLD
-        })
+        let soilDb2 = low(constants.SOIL2_DB_PATH, {
+            storage: require('lowdb/lib/storages/file-async')
+        })        
+        const logs2 = soilDb2.get('soil')
+            .sortBy(['timestamp'])
+            .reverse()
+            .take(10)
+            .map((o) => { return roundToClosest(o.moisture, 100) })
+            .value()
 
-        if (allBelowThreshold) {
+        let allBelowThreshold2 = _.every(logs2, function(log) { return log < constants.MOISTURE_THRESHOLD })
 
-            logger.log('All logs below the threshold of ' + constants.MOISTURE_THRESHOLD + '% for "' + soilDbPath + '" , closing relay(' + relay.pin + ').')
+        if (allBelowThreshold1 && allBelowThreshold2) {
+
+            logger.log('All logs below the threshold of ' + constants.MOISTURE_THRESHOLD + '%, closing relay(' + relay.pin + ').')
 
             relay.close();
-
-            //logger.log ('Relay(' + relay.pin + ') closed.')
-
+            
             logger.log('Waiting for '+ (constants.WATERING_TIME / 1000) + ' seconds...')
 
-            var wateringTImeout = setTimeout(function() {
-
-                relay.open();
-
-                //logger.log('Relay(' + relay.pin + ') opened.')          
-
-            }, constants.WATERING_TIME)                      
+            var wateringTImeout = setTimeout(function() { relay.open(); }, constants.WATERING_TIME)                      
         } else {
-            //logger.log('Not all logs below threshold of ' + constants.MOISTURE_THRESHOLD + '%, waiting ' + (constants.WATERING_CHECK_INTERVAL / 1000) + ' seconds...')
+            if (allBelowThreshold1) {
+                logger.log('Only soil sensor 1 below the threshold.')
+            } else if (allBelowThreshold2) {
+                logger.log('Only soil sensor 2 below the threshold.')
+            }
         }
     } catch (e) {
         logger.log(e)
@@ -58,9 +63,7 @@ function wateringCheck(soilDbPath, relay) {
 module.exports = {
     relays: {},
     init: function() {
-
-        //logger.log('Setting intial state: Opening relay(' + constants.RELAY1_PIN + ').')
-        
+               
         this.relays[constants.RELAY1_PIN] = new five.Relay({
             pin: constants.RELAY1_PIN
         });        
@@ -71,19 +74,17 @@ module.exports = {
  
         var self = this;
         
-        logger.log('Starting "' + constants.SOIL1_DB_PATH + '" trigger on a ' + (constants.WATERING_CHECK_INTERVAL / 1000) + ' second interval...');
+        logger.log('Starting trigger on a ' + (constants.WATERING_CHECK_INTERVAL / 1000) + ' second interval...');
 
-        this.soil1Trigger = setInterval(
-            function() { wateringCheck(constants.SOIL1_DB_PATH, self.relays[constants.RELAY1_PIN]) }, 
+        this.soilTrigger = setInterval(
+            function() { wateringCheck(self.relays[constants.RELAY1_PIN]) }, 
             constants.WATERING_CHECK_INTERVAL); 
     },
     stop: function() {
 
-        logger.log('Stopping "' + constants.SOIL1_DB_PATH + '" trigger.');
+        logger.log('Stopping trigger.');
 
-        clearInterval(this.soil1Trigger);
-
-        //logger.log('Opening relay(' + constants.RELAY1_PIN + ').')
+        clearInterval(this.soilTrigger);        
 
         this.relays[constants.RELAY1_PIN].open();
     }
