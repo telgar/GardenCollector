@@ -28,6 +28,10 @@ function wateringCheck(relay) {
 
         let allBelowThreshold1 = _.every(logs1, function(log) { return log < constants.MOISTURE_THRESHOLD })
 
+        if (allBelowThreshold1) {
+            logger.log('Soil sensor 1 below the threshold.')
+        } 
+
         let soilDb2 = low(constants.SOIL2_DB_PATH, {
             storage: require('lowdb/lib/storages/file-async')
         })        
@@ -40,14 +44,17 @@ function wateringCheck(relay) {
 
         let allBelowThreshold2 = _.every(logs2, function(log) { return log < constants.MOISTURE_THRESHOLD })
 
+        if (allBelowThreshold2) {
+            logger.log('Soil sensor 2 below the threshold.')
+        }
+
         let lastWatered = waterRepo.lastLog();
 
         let tooSoonToWater = true;
         let tooLongSinceWater = false;
         
         if (lastWatered != null) {
-            logger.log('Last watered: ' + lastWatered)
-
+            
             let hoursSinceLastWater = (new Date().getTime() - lastWatered.getTime()) / 1000 / 60 / 60
             
             logger.log('Last watered: ' + hoursSinceLastWater + ' hours ago.')
@@ -67,26 +74,18 @@ function wateringCheck(relay) {
                 tooSoonToWater = false;
                 logger.log('Last watered: Setting tooSoonToWater to false')
             }
-        }
+        }        
 
         let itsWateringTime = tooLongSinceWater || (!tooSoonToWater && allBelowThreshold1 && allBelowThreshold2)
 
         if (itsWateringTime) {
-
-            //logger.log('All logs below the threshold of ' + constants.MOISTURE_THRESHOLD + '%, closing relay(' + relay.pin + ').')
-
+            
             relay.close();
             
             logger.log('Watering for '+ (constants.WATERING_TIME / 1000) + ' seconds...')
             waterRepo.log();
 
             var wateringTImeout = setTimeout(function() { relay.open(); }, constants.WATERING_TIME)                      
-        } else {
-            if (allBelowThreshold1) {
-                logger.log('Only soil sensor 1 below the threshold.')
-            } else if (allBelowThreshold2) {
-                logger.log('Only soil sensor 2 below the threshold.')
-            }
         }
     } catch (e) {
         logger.log(e)
