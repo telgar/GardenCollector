@@ -46,8 +46,10 @@ function wateringCheck(relay) {
         let tooLongSinceWater = false;
         
         if (lastWatered != undefined) {
+            logger.log('Last watered: ' + JSON.stringify(lastWatered))
+            
             let hoursSinceLastWater = (new Date().getTime() - lastWatered.getTime()) / 1000 / 60 / 60
-            logger.log('Last watered: ' + lastWatered)
+            
             logger.log('Last watered: ' + hoursSinceLastWater + ' hours ago.')
 
             if (hoursSinceLastWater > constants.MAX_LAST_WATERED_THRESHOLD_HOURS) {
