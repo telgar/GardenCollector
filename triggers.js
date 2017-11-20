@@ -42,7 +42,11 @@ function wateringCheck(relay) {
 
         let lastWatered = waterRepo.lastLog();
 
-        logger.log('Last watered: ' + lastWatered)
+        if (lastWatered != undefined) {
+            let hoursSinceLastWater = (new Date().getTime() - lastWatered.getTime()) / 1000 / 60 / 60
+            logger.log('Last watered: ' + lastWatered)
+            logger.log('Last watered: ' + hoursSinceLastWater + ' hours ago.')
+        }        
 
         if (allBelowThreshold1 && allBelowThreshold2) {
 

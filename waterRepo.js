@@ -27,7 +27,7 @@ const lastLog = function() {
         .sortBy(['timestamp'])
         .reverse()
         .take(1)
-        .map((o) => { return o.timestamp })
+        .map((o) => { return new Date(o.timestamp) })
         .value()
 }
 
