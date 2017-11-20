@@ -23,16 +23,18 @@ const log = function() {
 
 const lastLog = function() {
 
-    let result = wateringDb.get('logs')
-        .sortBy(['timestamp'])
-        .reverse()
-        .take(1)
-        .map((o) => { return new Date(o.timestamp) })
-        .value()
+    try {
+        let result = wateringDb.get('logs')
+            .sortBy(['timestamp'])
+            .reverse()
+            .take(1)
+            .map((o) => { return new Date(o.timestamp) })
+            .value()
 
-    if (result != undefined && result.length == 1) {
-        return new Date(result[0])
-    }
+        if (result.length == 1) {
+            return new Date(result[0])
+        }
+    } catch { }
 
     return null;
 }
