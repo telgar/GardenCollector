@@ -34,7 +34,7 @@ const lastLog = function() {
         if (result.length == 1) {
             return new Date(result[0])
         }
-    } catch { }
+    } catch(err) { }
 
     return null;
 }
