@@ -55,9 +55,15 @@ function wateringCheck(relay) {
             if (hoursSinceLastWater > constants.MAX_LAST_WATERED_THRESHOLD_HOURS) {
                 tooLongSinceWater = true;
                 logger.log('Last watered: Setting tooLongSinceWater to true')
+            } else {
+                tooLongSinceWater = false;
+                logger.log('Last watered: Setting tooLongSinceWater to false')
             }
 
-            if (constants.MIN_LAST_WATERED_THRESHOLD_HOURS > hoursSinceLastWater) {
+            if (hoursSinceLastWater < constants.MIN_LAST_WATERED_THRESHOLD_HOURS) {
+                tooSoonToWater = true;
+                logger.log('Last watered: Setting tooSoonToWater to true')
+            } else {
                 tooSoonToWater = false;
                 logger.log('Last watered: Setting tooSoonToWater to false')
             }
@@ -65,13 +71,13 @@ function wateringCheck(relay) {
 
         let itsWateringTime = tooLongSinceWater || (!tooSoonToWater && allBelowThreshold1 && allBelowThreshold2)
 
-        if (allBelowThreshold1 && allBelowThreshold2) {
+        if (itsWateringTime) {
 
-            logger.log('All logs below the threshold of ' + constants.MOISTURE_THRESHOLD + '%, closing relay(' + relay.pin + ').')
+            //logger.log('All logs below the threshold of ' + constants.MOISTURE_THRESHOLD + '%, closing relay(' + relay.pin + ').')
 
             relay.close();
             
-            logger.log('Waiting for '+ (constants.WATERING_TIME / 1000) + ' seconds...')
+            logger.log('Watering for '+ (constants.WATERING_TIME / 1000) + ' seconds...')
             waterRepo.log();
 
             var wateringTImeout = setTimeout(function() { relay.open(); }, constants.WATERING_TIME)                      
