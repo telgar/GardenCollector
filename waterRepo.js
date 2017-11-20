@@ -23,7 +23,7 @@ const log = function() {
 
 const lastLog = function() {
 
-    wateringDb.get('logs')
+    return wateringDb.get('logs')
         .sortBy(['timestamp'])
         .reverse()
         .take(1)
