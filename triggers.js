@@ -50,6 +50,9 @@ function wateringCheck(relay) {
 
         let lastWatered = waterRepo.lastLog();
 
+        logger.log(lastWatered)
+        logger.log(JSON.stringify(lastWatered))
+
         let tooSoonToWater = true;
         let tooLongSinceWater = false;
         
