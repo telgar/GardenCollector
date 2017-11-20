@@ -5,6 +5,7 @@ const five = require("johnny-five");
 
 const constants = require('./constants');
 const logger = require('./logger');
+const waterRepo = require('./waterRepo');
 
 function roundToClosest(number, closest) {
 
@@ -39,6 +40,10 @@ function wateringCheck(relay) {
 
         let allBelowThreshold2 = _.every(logs2, function(log) { return log < constants.MOISTURE_THRESHOLD })
 
+        let lastWatered = waterRepo.lastLog();
+
+        logger.log('Last watered: ' + lastWatered)
+
         if (allBelowThreshold1 && allBelowThreshold2) {
 
             logger.log('All logs below the threshold of ' + constants.MOISTURE_THRESHOLD + '%, closing relay(' + relay.pin + ').')
@@ -46,6 +51,7 @@ function wateringCheck(relay) {
             relay.close();
             
             logger.log('Waiting for '+ (constants.WATERING_TIME / 1000) + ' seconds...')
+            waterRepo.log();
 
             var wateringTImeout = setTimeout(function() { relay.open(); }, constants.WATERING_TIME)                      
         } else {
@@ -60,10 +66,10 @@ function wateringCheck(relay) {
     }
 }
 
-module.exports = {
+module.exports = {    
     relays: {},
-    init: function() {
-               
+    init: function() {   
+
         this.relays[constants.RELAY1_PIN] = new five.Relay({
             pin: constants.RELAY1_PIN
         });        
