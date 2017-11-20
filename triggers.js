@@ -42,11 +42,26 @@ function wateringCheck(relay) {
 
         let lastWatered = waterRepo.lastLog();
 
+        let tooSoonToWater = true;
+        let tooLongSinceWater = false;
+        
         if (lastWatered != undefined) {
             let hoursSinceLastWater = (new Date().getTime() - lastWatered.getTime()) / 1000 / 60 / 60
             logger.log('Last watered: ' + lastWatered)
             logger.log('Last watered: ' + hoursSinceLastWater + ' hours ago.')
-        }        
+
+            if (hoursSinceLastWater > constants.MAX_LAST_WATERED_THRESHOLD_HOURS) {
+                tooLongSinceWater = true;
+                logger.log('Last watered: Setting tooLongSinceWater to true')
+            }
+
+            if (constants.MIN_LAST_WATERED_THRESHOLD_HOURS > hoursSinceLastWater) {
+                tooSoonToWater = false;
+                logger.log('Last watered: Setting tooSoonToWater to false')
+            }
+        }
+
+        let itsWateringTime = tooLongSinceWater || (!tooSoonToWater && allBelowThreshold1 && allBelowThreshold2)
 
         if (allBelowThreshold1 && allBelowThreshold2) {
 
