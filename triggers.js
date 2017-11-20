@@ -61,11 +61,11 @@ function wateringCheck(relay) {
             }
 
             if (hoursSinceLastWater < constants.MIN_LAST_WATERED_THRESHOLD_HOURS) {
-                tooSoonToWater = false;
-                logger.log('Last watered: Setting tooSoonToWater to false')
-            } else {
                 tooSoonToWater = true;
                 logger.log('Last watered: Setting tooSoonToWater to true')
+            } else {
+                tooSoonToWater = false;
+                logger.log('Last watered: Setting tooSoonToWater to false')
             }
         }
 
