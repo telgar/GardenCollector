@@ -45,9 +45,9 @@ function wateringCheck(relay) {
         let tooSoonToWater = true;
         let tooLongSinceWater = false;
         
-        if (lastWatered != undefined) {
-            logger.log('Last watered: ' + JSON.stringify(lastWatered))
-            
+        if (lastWatered != null) {
+            logger.log('Last watered: ' + lastWatered)
+
             let hoursSinceLastWater = (new Date().getTime() - lastWatered.getTime()) / 1000 / 60 / 60
             
             logger.log('Last watered: ' + hoursSinceLastWater + ' hours ago.')
