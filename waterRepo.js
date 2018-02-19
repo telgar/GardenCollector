@@ -1,5 +1,5 @@
-const low = require('lowdb')
-const fileAsync = require('lowdb/lib/storages/file-async')
+const low = require('lowdb');
+const fileAsync = require('lowdb/lib/storages/file-async');
 
 const constants = require('./constants');
 

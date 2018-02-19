@@ -11,7 +11,7 @@ var humidityPerc = function(reading, dryLimit, wetLimit, rangeLimit) {
     //logger.log('Formatters: Wetter than wet! Reading = ' + reading)
   }
 
-  return (dryLimit - reading) / rangeLimit * 100;;
+  return (dryLimit - reading) / rangeLimit * 100;
 }
 
 module.exports = {
